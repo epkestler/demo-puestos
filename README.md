@@ -60,7 +60,9 @@ Que sean consumidos desde el Backend para obtener la estructura del árbol de je
 
 ## 🏗️ Arquitectura del Sistema
 
-La aplicación está diseñada utilizando una arquitectura por capas. 
+### 🖼️ Diagrama de arquitectura
+
+![Diagrama de Arquitectura](/images/arquitectura.png) 
 
 ### 🔹 Estructura de capas:
 
@@ -77,15 +79,16 @@ La aplicación está diseñada utilizando una arquitectura por capas.
      - Services/ : Lógica de Negocio
      - Model/ : Clases para las entidades (mapear tablas y resultados de consultas) 
    - Expone endpoints que manejan la lógica de negocio (Implementa Swagger).
-   | Método | Ruta                  | Descripción                        | Parámetros                  |
-   |--------|-----------------------|----------------------------------|-----------------------------|
-   | GET    | `/api/empleado/lista` | Obtiene lista completa de empleados | Query params opcionales para filtros |
-   | GET    | `/api/empleado/{id}`  | Obtiene detalle de un empleado por Id | `id` (int)                  |
-   | POST   | `/api/empleado`       | Crea un nuevo empleado             | Cuerpo (JSON) con datos del empleado |
-   | PUT    | `/api/empleado/{id}`  | Actualiza un empleado existente    | `id` (int), cuerpo JSON con datos actualizados |
-   | DELETE | `/api/empleado/{id}`  | Elimina un empleado por Id         | `id` (int)                  |
-   |--------|-----------------------|----------------------------------|-----------------------------|
-   | GET    | `/api/puesto/lista`        | Obtiene lista completa de puestos |                             |
+
+| Método | Ruta                  | Descripción                        | Parámetros                  |
+|--------|-----------------------|----------------------------------|-----------------------------|
+| GET    | `/api/empleado/lista` | Obtiene lista completa de empleados | Query params opcionales para filtros |
+| GET    | `/api/empleado/{id}`  | Obtiene detalle de un empleado por Id | `id` (int)                  |
+| POST   | `/api/empleado`       | Crea un nuevo empleado             | Cuerpo (JSON) con datos del empleado |
+| PUT    | `/api/empleado/{id}`  | Actualiza un empleado existente    | `id` (int), cuerpo JSON con datos actualizados |
+| DELETE | `/api/empleado/{id}`  | Elimina un empleado por Id         | `id` (int)                  |
+|--------|-----------------------|----------------------------------|-----------------------------|
+| GET    | `/api/puesto/lista`        | Obtiene lista completa de puestos |                             |
    
    - Se comunica con la base de datos mediante Dapper y procedimientos almacenados. **configurar cadena de conexion en appsetting.json**
    - Implementa [Middleware](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling?view=aspnetcore-8.0#exception-handler-lambda) para manejo de excepciones 
@@ -94,10 +97,8 @@ La aplicación está diseñada utilizando una arquitectura por capas.
    - Contiene las tablas
      - `Empleado` `Puesto`.
    - Procedimientos almacenados para CRUD de las tablas.
-   (/images/er.png)
-   ***Ejecutar en orden del numeral los [script](script)***
 
-### 🖼️ Diagrama de arquitectura
+![Modelo relacional](/images/er.png)
 
-![Diagrama de Arquitectura](/images/arquitectura.png)
+***Ejecutar en orden del numeral los [script](script)***
 
