@@ -1,0 +1,55 @@
+﻿@model List<EmpleadoViewModel>
+@using Microsoft.AspNetCore.Html
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Jerarquía de Empleados";
+}
+
+<h2 class="mb-4">Super Organigrama</h2>
+<a class="btn btn-primary" asp-action="Create">Nuevo Empleado</a>
+<div class="card p-3 shadow-sm">
+    @RenderJerarquia(Model, null)
+</div>
+
+@functions {
+    public IHtmlContent RenderJerarquia(List<EmpleadoViewModel> empleados, int? jefeId)
+    {
+        var hijos = empleados.Where(e => e.IdJefe == jefeId).ToList();
+        if (!hijos.Any()) return HtmlString.Empty;
+
+        var ul = new TagBuilder("ul");
+        ul.AddCssClass("list-group list-group-flush ps-4");
+        var token = ViewBag.AntiForgeryToken as string;
+
+        foreach (var emp in hijos)
+        {
+            var formHtml = $@"
+                <form method='post' action='/Empleado/Eliminar/{emp.Id}' style='display:inline;' onsubmit='return confirm(""¿Está seguro de eliminar este empleado?"")'>
+                    <input type='hidden' name='id' value='{emp.Id}' />
+                    <input type='hidden' name='__RequestVerificationToken' value='{token}' />
+                    <button type='submit' class='btn btn-link text-danger p-0 m-0 align-baseline' title='Eliminar'>
+                        <i class='bi bi-trash-fill'></i>
+                    </button>
+                </form>";
+            var li = new TagBuilder("li");
+            li.AddCssClass("list-group-item");
+
+            li.InnerHtml.AppendHtml($"<strong class='text-primary'>{emp.Nombre}</strong> ");
+            li.InnerHtml.AppendHtml($"<span class='text-muted'>({emp.NombrePuesto})</span>");
+            li.InnerHtml.AppendHtml($@"
+               
+                    <a href='/Empleado/Edit/{emp.Id}' class='text-success me-2' title='Editar'>
+                        <i class='bi bi-pencil-square'></i>
+                    </a>
+                    
+                ");
+            //li.InnerHtml.AppendHtml(formHtml);
+            li.InnerHtml.AppendHtml(RenderJerarquia(empleados, emp.Id));
+            ul.InnerHtml.AppendHtml(li);
+
+        }
+
+        return ul;
+    }
+}
